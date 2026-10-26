@@ -8,6 +8,100 @@
     <title>Security Scan Results</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .table-row-clickable {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .table-row-clickable:hover {
+            background: #eef4fb;
+        }
+        .chart-container {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .chart-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+        }
+        .bar-label {
+            width: 75px;
+            font-weight: bold;
+        }
+        .bar-track {
+            flex: 1;
+            background: #e2e8f0;
+            height: 18px;
+            border-radius: 9px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 9px;
+            transition: width 0.8s ease;
+        }
+        .bar-count {
+            width: 40px;
+            font-weight: bold;
+            text-align: right;
+        }
+        .detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 30, 61, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .detail-modal.active {
+            display: flex;
+        }
+        .modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            max-width: 750px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .code-container {
+            background: #071e3d;
+            color: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -60,45 +154,73 @@
 
                 <div class="summary-card">
                     <h3>Total Issues</h3>
-                    <strong>6</strong>
+                    <strong id="totalCount">0</strong>
                 </div>
 
                 <div class="summary-card critical">
                     <h3>Critical</h3>
-                    <strong>1</strong>
+                    <strong id="critCount">0</strong>
                 </div>
 
                 <div class="summary-card high">
                     <h3>High</h3>
-                    <strong>2</strong>
+                    <strong id="highCount">0</strong>
                 </div>
 
                 <div class="summary-card medium">
                     <h3>Medium</h3>
-                    <strong>2</strong>
+                    <strong id="medCount">0</strong>
                 </div>
 
                 <div class="summary-card low">
                     <h3>Low</h3>
-                    <strong>1</strong>
+                    <strong id="lowCount">0</strong>
                 </div>
 
             </div>
 
 
-            <!-- Risk Level -->
+            <!-- Visual Severity Distribution Chart -->
+            <div class="chart-container">
+                <h3 style="color: #071e3d; font-size: 16px; margin-bottom: 5px;">📊 Vulnerability Severity Distribution</h3>
+                <p style="color: #607d8b; font-size: 13px;">Proportion of identified security findings classified by calculated risk level</p>
+                <div class="chart-bars" id="severityChart">
+                    <div class="bar-row">
+                        <span class="bar-label critical-text">Critical</span>
+                        <div class="bar-track"><div class="bar-fill" id="barCritical" style="width: 0%; background: #dc2626;"></div></div>
+                        <span class="bar-count" id="countCritical">0</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label high-text">High</span>
+                        <div class="bar-track"><div class="bar-fill" id="barHigh" style="width: 0%; background: #ea580c;"></div></div>
+                        <span class="bar-count" id="countHigh">0</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label medium-text">Medium</span>
+                        <div class="bar-track"><div class="bar-fill" id="barMedium" style="width: 0%; background: #d97706;"></div></div>
+                        <span class="bar-count" id="countMedium">0</span>
+                    </div>
+                    <div class="bar-row">
+                        <span class="bar-label low-text">Low</span>
+                        <div class="bar-track"><div class="bar-fill" id="barLow" style="width: 0%; background: #16a34a;"></div></div>
+                        <span class="bar-count" id="countLow">0</span>
+                    </div>
+                </div>
+            </div>
 
-            <div class="overall-risk">
+
+            <!-- Overall Risk Level -->
+
+            <div class="overall-risk" id="overallRiskBox">
 
                 <h2>Overall Risk Level</h2>
 
-                <div class="risk-badge">
-                    HIGH RISK
+                <div class="risk-badge" id="riskBadge">
+                    ANALYZING
                 </div>
 
-                <p>
-                    Multiple security issues were detected.
-                    High-priority issues should be reviewed first.
+                <p id="riskDescription">
+                    Evaluating risk score and prioritizing vulnerabilities...
                 </p>
 
             </div>
@@ -108,70 +230,58 @@
 
             <div class="vulnerability-section">
 
-                <h2>Detected Vulnerabilities</h2>
+                <h2>Detected Vulnerabilities (Prioritized by Risk Score)</h2>
+                <p style="color: #607d8b; font-size: 14px; margin-bottom: 15px;">
+                    Ranked by Risk Score = Impact (1-5) &times; Likelihood (1-5). Click on any vulnerability to view remediation details and secure code fix.
+                </p>
 
                 <div class="vulnerability-table">
 
-                    <div class="table-header">
+                    <div class="table-header" style="grid-template-columns: 2fr 1.2fr 1fr 1fr;">
                         <span>Vulnerability</span>
+                        <span>OWASP / CWE</span>
+                        <span>Risk Score (I &times; L)</span>
                         <span>Severity</span>
-                        <span>Status</span>
                     </div>
 
-
-                    <div class="table-row">
-
-                        <span>SQL Injection</span>
-
-                        <span class="severity critical-text">
-                            Critical
-                        </span>
-
-                        <span>Detected</span>
-
-                    </div>
-
-
-                    <div class="table-row">
-
-                        <span>Cross-Site Scripting</span>
-
-                        <span class="severity high-text">
-                            High
-                        </span>
-
-                        <span>Detected</span>
-
-                    </div>
-
-
-                    <div class="table-row">
-
-                        <span>Missing Security Headers</span>
-
-                        <span class="severity medium-text">
-                            Medium
-                        </span>
-
-                        <span>Detected</span>
-
-                    </div>
-
-
-                    <div class="table-row">
-
-                        <span>Information Disclosure</span>
-
-                        <span class="severity low-text">
-                            Low
-                        </span>
-
-                        <span>Detected</span>
-
+                    <div id="vulnerabilityRows">
+                        <!-- Populated dynamically by script.js -->
                     </div>
 
                 </div>
 
+            </div>
+
+
+            <!-- Remediation Details Modal -->
+            <div class="detail-modal" id="remediationModal" onclick="if(event.target === this) closeRemediationModal();">
+                <div class="modal-card">
+                    <span class="modal-close" onclick="closeRemediationModal()">&times;</span>
+                    <h2 id="modalTitle" style="color: #071e3d; margin-bottom: 10px;">Vulnerability Details</h2>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <span id="modalSeverityBadge" class="risk-badge" style="padding: 5px 12px; font-size: 13px;">Severity</span>
+                        <span id="modalRiskScore" style="padding: 5px 12px; background: #f1f5f9; border-radius: 20px; font-weight: bold; font-size: 13px; color: #071e3d;">Risk: 0/25</span>
+                    </div>
+
+                    <p style="font-size: 14px; color: #64748b; margin-bottom: 8px;">
+                        <strong>OWASP:</strong> <span id="modalOWASP">-</span> | <strong>CWE:</strong> <span id="modalCWE">-</span>
+                    </p>
+                    <p style="font-size: 14px; color: #64748b; margin-bottom: 15px;">
+                        <strong>Endpoint:</strong> <code id="modalEndpoint" style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">-</code>
+                    </p>
+
+                    <h3 style="color: #071e3d; margin-top: 15px; margin-bottom: 5px; font-size: 16px;">📖 Explanation</h3>
+                    <p id="modalExplanation" style="color: #334155; line-height: 1.6; font-size: 14px; margin-bottom: 15px;">-</p>
+
+                    <h3 style="color: #071e3d; margin-top: 15px; margin-bottom: 5px; font-size: 16px;">⚠️ Security Impact</h3>
+                    <p id="modalImpact" style="color: #334155; line-height: 1.6; font-size: 14px; margin-bottom: 15px;">-</p>
+
+                    <h3 style="color: #071e3d; margin-top: 15px; margin-bottom: 5px; font-size: 16px;">🛡️ Defensive Fix</h3>
+                    <div id="modalFix" style="white-space: pre-line; background: #f8fafc; border-left: 4px solid #2196f3; padding: 12px; border-radius: 6px; font-size: 14px; color: #334155; margin-bottom: 15px;">-</div>
+
+                    <h3 style="color: #071e3d; margin-top: 15px; margin-bottom: 5px; font-size: 16px;">💻 Secure Code Implementation Example</h3>
+                    <pre class="code-container"><code id="modalCode">-</code></pre>
+                </div>
             </div>
 
 
@@ -188,7 +298,7 @@
 
                 <button
                     class="report-button"
-                    onclick="window.location.href='report.html'"
+                    onclick="goToReport()"
                 >
                     📄 View Security Report
                 </button>

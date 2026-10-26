@@ -8,6 +8,39 @@
     <title>Security Assessment Report</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .code-block {
+            background: #071e3d;
+            color: #f8fafc;
+            padding: 14px;
+            border-radius: 8px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            overflow-x: auto;
+            margin-top: 8px;
+            margin-bottom: 12px;
+        }
+        .fix-box {
+            background: #f1f5f9;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            margin-bottom: 10px;
+            white-space: pre-line;
+            font-size: 14px;
+            color: #334155;
+        }
+        .finding-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 
 <body>
@@ -39,33 +72,49 @@
                 <h1>Security Assessment Report</h1>
 
                 <p>
-                    Intelligent Web Application Security Assessment
+                    Intelligent Web Application Security Assessment & Risk Prioritization
                 </p>
 
             </div>
 
 
+            <!-- Target Information -->
             <div class="report-box">
 
                 <h2>Target Information</h2>
 
-                <p>
-                    <strong>Target Website:</strong>
-                    <span id="reportURL">
-                        https://example.com
-                    </span>
-                </p>
+                <div class="report-info">
+                    <div>
+                        <span>Target Website</span>
+                        <strong id="reportURL">https://example.com</strong>
+                    </div>
+                    <div>
+                        <span>Assessment Status</span>
+                        <strong class="completed" id="reportStatus">Completed</strong>
+                    </div>
+                </div>
 
-                <p>
-                    <strong>Status:</strong>
-                    <span class="completed">
-                        Completed
-                    </span>
+                <div style="margin-top: 15px; font-size: 14px; color: #64748b;">
+                    <span>Assessment Timestamp: </span>
+                    <strong id="reportTimestamp" style="color: #071e3d;">-</strong>
+                </div>
+
+            </div>
+
+
+            <!-- Executive Summary -->
+            <div class="report-box">
+
+                <h2>Executive Summary</h2>
+
+                <p id="reportExecutiveSummary" style="color: #334155; line-height: 1.7;">
+                    Loading executive summary and security evaluation...
                 </p>
 
             </div>
 
 
+            <!-- Risk Summary -->
             <div class="report-box">
 
                 <h2>Risk Summary</h2>
@@ -73,22 +122,22 @@
                 <div class="risk-summary">
 
                     <div>
-                        <strong class="critical-text">1</strong>
+                        <strong class="critical-text" id="reportCriticalCount">0</strong>
                         <span>Critical</span>
                     </div>
 
                     <div>
-                        <strong class="high-text">2</strong>
+                        <strong class="high-text" id="reportHighCount">0</strong>
                         <span>High</span>
                     </div>
 
                     <div>
-                        <strong class="medium-text">2</strong>
+                        <strong class="medium-text" id="reportMediumCount">0</strong>
                         <span>Medium</span>
                     </div>
 
                     <div>
-                        <strong class="low-text">1</strong>
+                        <strong class="low-text" id="reportLowCount">0</strong>
                         <span>Low</span>
                     </div>
 
@@ -97,123 +146,32 @@
             </div>
 
 
+            <!-- Detected Vulnerabilities -->
             <div class="report-box">
 
-                <h2>Detected Vulnerabilities</h2>
+                <h2>Detected Vulnerabilities & Remediation Knowledge Base</h2>
+                <p style="color: #64748b; font-size: 14px; margin-bottom: 20px;">
+                    Prioritized according to Risk Score = Impact &times; Likelihood. Includes simple explanations, impacts, and defensive fixes with secure code examples.
+                </p>
 
-                <div class="finding">
-
-                    <h3>SQL Injection</h3>
-
-                    <p>
-                        <strong>Severity:</strong>
-                        <span class="critical-text">
-                            Critical
-                        </span>
-                    </p>
-
-                    <p>
-                        Improper input handling may allow
-                        unintended database queries.
-                    </p>
-
-                    <p>
-                        <strong>Remediation:</strong>
-                        Use parameterized queries and validate input.
-                    </p>
-
-                </div>
-
-
-                <div class="finding">
-
-                    <h3>Cross-Site Scripting (XSS)</h3>
-
-                    <p>
-                        <strong>Severity:</strong>
-                        <span class="high-text">
-                            High
-                        </span>
-                    </p>
-
-                    <p>
-                        Improper input handling may allow
-                        malicious scripts to execute.
-                    </p>
-
-                    <p>
-                        <strong>Remediation:</strong>
-                        Validate and encode user input.
-                    </p>
-
-                </div>
-
-
-                <div class="finding">
-
-                    <h3>Missing Security Headers</h3>
-
-                    <p>
-                        <strong>Severity:</strong>
-                        <span class="medium-text">
-                            Medium
-                        </span>
-                    </p>
-
-                    <p>
-                        Important HTTP security headers are missing
-                        or incorrectly configured.
-                    </p>
-
-                    <p>
-                        <strong>Remediation:</strong>
-                        Configure appropriate security headers.
-                    </p>
-
-                </div>
-
-
-                <div class="finding">
-
-                    <h3>Information Disclosure</h3>
-
-                    <p>
-                        <strong>Severity:</strong>
-                        <span class="low-text">
-                            Low
-                        </span>
-                    </p>
-
-                    <p>
-                        Unnecessary technical information may be exposed.
-                    </p>
-
-                    <p>
-                        <strong>Remediation:</strong>
-                        Remove unnecessary information from responses.
-                    </p>
-
+                <div id="reportFindingsContainer">
+                    <!-- Populated dynamically by script.js -->
                 </div>
 
             </div>
 
 
+            <!-- Recommended Actions -->
             <div class="report-box">
 
                 <h2>Recommended Actions</h2>
 
-                <ol class="recommendations">
-
-                    <li>Fix critical vulnerabilities first.</li>
-
-                    <li>Resolve high-severity vulnerabilities.</li>
-
-                    <li>Configure proper security headers.</li>
-
-                    <li>Validate and sanitize user inputs.</li>
-
-                    <li>Perform regular security assessments.</li>
-
+                <ol class="recommendations" id="reportRecommendations">
+                    <li>Fix Critical vulnerabilities (e.g., SQL Injection, Command Injection) immediately.</li>
+                    <li>Resolve High-severity vulnerabilities with input sanitization and parameterized APIs.</li>
+                    <li>Configure defensive HTTP security headers (CSP, HSTS, X-Frame-Options).</li>
+                    <li>Audit session cookies to ensure HttpOnly, Secure, and SameSite attributes are enforced.</li>
+                    <li>Perform regular automated verification scans before production deployments.</li>
                 </ol>
 
             </div>
@@ -222,7 +180,10 @@
             <div class="report-footer">
 
                 <p>
-                    Generated by SecureScan
+                    Generated by SecureScan | Web Application Security Risk Prioritization System
+                </p>
+                <p style="font-size: 12px; color: #94a3b8; margin-top: 6px;">
+                    Lab Use Only: Authorized educational testing strictly on systems you own or have explicit permission to test.
                 </p>
 
             </div>
@@ -234,6 +195,13 @@
                     class="scan-button"
                     onclick="window.location.href='scan.html'">
                     🔍 Start New Scan
+                </button>
+
+                <button
+                    class="report-button"
+                    style="background: #2563eb;"
+                    onclick="downloadStandaloneReport()">
+                    📥 Download HTML Report
                 </button>
 
                 <button

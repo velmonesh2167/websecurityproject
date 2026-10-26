@@ -1,0 +1,197 @@
+{
+  "@programName": "OWASP ZAP",
+  "@version": "2.14.0",
+  "@generated": "2026-10-26T10:30:00.000Z",
+  "site": [
+    {
+      "@name": "http://lab-target.local",
+      "@host": "lab-target.local",
+      "@port": "80",
+      "@ssl": "false",
+      "alerts": [
+        {
+          "pluginId": "40018",
+          "alertRef": "40018-1",
+          "alert": "SQL Injection",
+          "name": "SQL Injection",
+          "riskcode": "3",
+          "confidence": "3",
+          "riskdesc": "High (High)",
+          "desc": "SQL injection may allow an attacker to view, modify or delete database contents, bypass authentication mechanisms, and execute administrative operations on the database server.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/profile.php?id=10",
+              "method": "GET",
+              "param": "id",
+              "attack": "10' OR '1'='1",
+              "evidence": "You have an error in your SQL syntax near ''1'='1'",
+              "otherinfo": "Boolean-based SQL injection detected on parameter 'id'"
+            }
+          ],
+          "count": "1",
+          "solution": "Use parameterized queries or prepared statements for all database operations. Implement strict input validation.",
+          "reference": "https://owasp.org/www-community/attacks/SQL_Injection",
+          "cweid": "89",
+          "wascid": "19",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "90020",
+          "alertRef": "90020-1",
+          "alert": "Remote OS Command Injection",
+          "name": "Remote OS Command Injection",
+          "riskcode": "3",
+          "confidence": "3",
+          "riskdesc": "High (High)",
+          "desc": "The application passes unvalidated user input directly to a system shell, allowing attackers to execute arbitrary commands on the operating system hosting the application.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/tools/ping.php",
+              "method": "POST",
+              "param": "host",
+              "attack": "127.0.0.1; whoami",
+              "evidence": "www-data",
+              "otherinfo": "Direct command execution observed in response payload."
+            }
+          ],
+          "count": "1",
+          "solution": "Avoid invoking shell processes with user inputs. If required, use parameterized system APIs with strict whitelisting.",
+          "reference": "https://owasp.org/www-community/attacks/Command_Injection",
+          "cweid": "78",
+          "wascid": "20",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "40012",
+          "alertRef": "40012-1",
+          "alert": "Cross-Site Scripting (Reflected)",
+          "name": "Cross-Site Scripting (Reflected)",
+          "riskcode": "3",
+          "confidence": "2",
+          "riskdesc": "High (Medium)",
+          "desc": "User input supplied via request parameters is included in immediate HTML output without proper contextual encoding, enabling execution of arbitrary client-side scripts.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/search.php?query=test",
+              "method": "GET",
+              "param": "query",
+              "attack": "<script>alert(1)</script>",
+              "evidence": "<script>alert(1)</script>",
+              "otherinfo": "Reflected in search results title container."
+            }
+          ],
+          "count": "1",
+          "solution": "Contextually encode all untrusted inputs before inserting them into HTML, JavaScript, CSS, or URL attributes.",
+          "reference": "https://owasp.org/www-community/attacks/xss/",
+          "cweid": "79",
+          "wascid": "8",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "40014",
+          "alertRef": "40014-1",
+          "alert": "Absence of Anti-CSRF Tokens",
+          "name": "Absence of Anti-CSRF Tokens",
+          "riskcode": "2",
+          "confidence": "2",
+          "riskdesc": "Medium (Medium)",
+          "desc": "A state-changing form submission does not include an unpredictable anti-CSRF token, allowing attackers to execute unauthorized actions on behalf of authenticated users.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/account/change_email.php",
+              "method": "POST",
+              "param": "email",
+              "attack": "",
+              "evidence": "<form action=\"change_email.php\" method=\"POST\">",
+              "otherinfo": "Target form contains sensitive email change fields."
+            }
+          ],
+          "count": "1",
+          "solution": "Implement unique, cryptographically strong anti-CSRF synchronization tokens on all state-changing requests and enforce SameSite=Lax cookie attribute.",
+          "reference": "https://owasp.org/www-community/attacks/csrf",
+          "cweid": "352",
+          "wascid": "9",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "10038",
+          "alertRef": "10038-1",
+          "alert": "Content Security Policy (CSP) Header Not Set",
+          "name": "Content Security Policy (CSP) Header Not Set",
+          "riskcode": "2",
+          "confidence": "3",
+          "riskdesc": "Medium (High)",
+          "desc": "The server response lacks a Content-Security-Policy header, reducing defense-in-depth protection against cross-site scripting (XSS) and data exfiltration.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/index.php",
+              "method": "GET",
+              "param": "",
+              "attack": "",
+              "evidence": "",
+              "otherinfo": "Response header Content-Security-Policy is absent."
+            }
+          ],
+          "count": "1",
+          "solution": "Configure a strict Content Security Policy HTTP response header specifying allowed script, object, and style sources.",
+          "reference": "https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP",
+          "cweid": "693",
+          "wascid": "15",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "10010",
+          "alertRef": "10010-1",
+          "alert": "Cookie No HttpOnly Flag",
+          "name": "Cookie No HttpOnly Flag",
+          "riskcode": "1",
+          "confidence": "3",
+          "riskdesc": "Low (High)",
+          "desc": "A session cookie was set without the HttpOnly attribute, allowing client-side scripts to read session identifiers via document.cookie during an XSS attack.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/login.php",
+              "method": "POST",
+              "param": "PHPSESSID",
+              "attack": "",
+              "evidence": "Set-Cookie: PHPSESSID=9a8bc43d1; Path=/",
+              "otherinfo": "Session cookie is accessible to JavaScript."
+            }
+          ],
+          "count": "1",
+          "solution": "Set the HttpOnly and Secure flags on all sensitive and session cookies.",
+          "reference": "https://owasp.org/www-community/HttpOnly",
+          "cweid": "1004",
+          "wascid": "13",
+          "sourceid": "1"
+        },
+        {
+          "pluginId": "10023",
+          "alertRef": "10023-1",
+          "alert": "Application Error Disclosure",
+          "name": "Application Error Disclosure",
+          "riskcode": "1",
+          "confidence": "2",
+          "riskdesc": "Low (Medium)",
+          "desc": "The application returns raw internal error details and database exception messages, exposing internal system paths and framework versions to potential attackers.",
+          "instances": [
+            {
+              "uri": "http://lab-target.local/vulnerable_app/debug.php",
+              "method": "GET",
+              "param": "",
+              "attack": "",
+              "evidence": "Exception in thread 'main' java.sql.SQLException: column 'admin' does not exist",
+              "otherinfo": "Stack trace exposed."
+            }
+          ],
+          "count": "1",
+          "solution": "Disable verbose error messages in production and display generic error pages while logging details to secure internal logs.",
+          "reference": "https://cwe.mitre.org/data/definitions/200.html",
+          "cweid": "200",
+          "wascid": "13",
+          "sourceid": "1"
+        }
+      ]
+    }
+  ]
+}

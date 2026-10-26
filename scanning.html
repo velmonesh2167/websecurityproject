@@ -39,9 +39,8 @@
                 Security Scan in Progress
             </h1>
 
-            <p class="scan-message">
-                Please wait while the system analyzes the
-                authorized web application.
+            <p class="scan-message" id="scanMessage">
+                Please wait while the system analyzes the authorized web application.
             </p>
 
 
@@ -60,7 +59,7 @@
 
                 <div class="progress-info">
 
-                    <span>Scanning...</span>
+                    <span id="progressStatusLabel">Scanning...</span>
 
                     <span id="progressText">
                         0%
@@ -82,24 +81,24 @@
 
             <div class="scan-steps">
 
-                <div class="scan-step active">
-                    <span>✓</span>
-                    Connecting to website
+                <div class="scan-step" id="step1">
+                    <span id="stepIcon1">⏳</span>
+                    Connecting to target application
                 </div>
 
-                <div class="scan-step active">
-                    <span>✓</span>
-                    Checking security configuration
+                <div class="scan-step" id="step2">
+                    <span id="stepIcon2">○</span>
+                    Checking security configuration & headers
                 </div>
 
-                <div class="scan-step">
-                    <span>⏳</span>
-                    Analyzing vulnerabilities
+                <div class="scan-step" id="step3">
+                    <span id="stepIcon3">○</span>
+                    Analyzing vulnerabilities & mapping OWASP/CWE
                 </div>
 
-                <div class="scan-step">
-                    <span>○</span>
-                    Preparing security report
+                <div class="scan-step" id="step4">
+                    <span id="stepIcon4">○</span>
+                    Calculating risk prioritization & preparing report
                 </div>
 
             </div>
@@ -114,9 +113,3 @@
 </body>
 
 </html>
-<script src="js/script.js"></script>
-<script>
-    setTimeout(function () {
-        window.location.href = "results.html";
-    }, 3000);
-</script>
