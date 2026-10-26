@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Scan Results</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🛡️ SecureScan
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="scan.html">New Scan</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Results Section -->
+
+    <section class="results-section">
+
+        <div class="results-container">
+
+            <h1>Security Assessment Results</h1>
+
+            <p class="results-subtitle">
+                Security analysis completed for the authorized web application.
+            </p>
+
+
+            <!-- Target Website -->
+
+            <div class="result-target">
+
+                <span>Target Website</span>
+
+                <strong id="resultURL">
+                    https://example.com
+                </strong>
+
+            </div>
+
+
+            <!-- Summary Cards -->
+
+            <div class="summary-cards">
+
+                <div class="summary-card">
+                    <h3>Total Issues</h3>
+                    <strong>6</strong>
+                </div>
+
+                <div class="summary-card critical">
+                    <h3>Critical</h3>
+                    <strong>1</strong>
+                </div>
+
+                <div class="summary-card high">
+                    <h3>High</h3>
+                    <strong>2</strong>
+                </div>
+
+                <div class="summary-card medium">
+                    <h3>Medium</h3>
+                    <strong>2</strong>
+                </div>
+
+                <div class="summary-card low">
+                    <h3>Low</h3>
+                    <strong>1</strong>
+                </div>
+
+            </div>
+
+
+            <!-- Risk Level -->
+
+            <div class="overall-risk">
+
+                <h2>Overall Risk Level</h2>
+
+                <div class="risk-badge">
+                    HIGH RISK
+                </div>
+
+                <p>
+                    Multiple security issues were detected.
+                    High-priority issues should be reviewed first.
+                </p>
+
+            </div>
+
+
+            <!-- Vulnerability Table -->
+
+            <div class="vulnerability-section">
+
+                <h2>Detected Vulnerabilities</h2>
+
+                <div class="vulnerability-table">
+
+                    <div class="table-header">
+                        <span>Vulnerability</span>
+                        <span>Severity</span>
+                        <span>Status</span>
+                    </div>
+
+
+                    <div class="table-row">
+
+                        <span>SQL Injection</span>
+
+                        <span class="severity critical-text">
+                            Critical
+                        </span>
+
+                        <span>Detected</span>
+
+                    </div>
+
+
+                    <div class="table-row">
+
+                        <span>Cross-Site Scripting</span>
+
+                        <span class="severity high-text">
+                            High
+                        </span>
+
+                        <span>Detected</span>
+
+                    </div>
+
+
+                    <div class="table-row">
+
+                        <span>Missing Security Headers</span>
+
+                        <span class="severity medium-text">
+                            Medium
+                        </span>
+
+                        <span>Detected</span>
+
+                    </div>
+
+
+                    <div class="table-row">
+
+                        <span>Information Disclosure</span>
+
+                        <span class="severity low-text">
+                            Low
+                        </span>
+
+                        <span>Detected</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Buttons -->
+
+            <div class="result-buttons">
+
+                <button
+                    class="scan-button"
+                    onclick="window.location.href='scan.html'"
+                >
+                    🔍 Start New Scan
+                </button>
+
+                <button
+                    class="report-button"
+                    onclick="window.location.href='report.html'"
+                >
+                    📄 View Security Report
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

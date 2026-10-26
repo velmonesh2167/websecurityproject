@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Start Security Scan</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+
+        <div class="logo">
+            🛡️ SecureScan
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Documentation</a>
+        </div>
+
+    </nav>
+
+
+    <!-- Scan Section -->
+
+    <section class="scan-section">
+
+        <div class="scan-container">
+
+            <div class="scan-icon">
+                🔍
+            </div>
+
+            <h1>
+                Start Security Assessment
+            </h1>
+
+            <p>
+                Enter an authorized web application URL
+                to begin the security assessment.
+            </p>
+
+
+            <!-- URL Input -->
+
+            <div class="url-box">
+
+                <label for="websiteURL">
+                    Website URL
+                </label>
+
+                <input
+                    type="url"
+                    id="websiteURL"
+                    placeholder="https://example.com"
+                >
+
+            </div>
+
+
+            <!-- Scan Button -->
+
+            <button
+    class="scan-button"
+    id="scanButton"
+    onclick="startScan()"
+>
+    🔍 Start Security Scan
+</button>
+
+
+            <!-- Permission Notice -->
+
+            <div class="notice">
+
+                ⚠️
+                Only scan websites that you own
+                or have explicit permission to test.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>

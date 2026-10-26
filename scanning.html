@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Security Scan in Progress</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🛡️ SecureScan
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">About</a>
+            <a href="#">Documentation</a>
+        </div>
+
+    </nav>
+
+
+    <section class="scanning-section">
+
+        <div class="scanning-container">
+
+            <div class="loading-icon">
+                🔍
+            </div>
+
+            <h1>
+                Security Scan in Progress
+            </h1>
+
+            <p class="scan-message">
+                Please wait while the system analyzes the
+                authorized web application.
+            </p>
+
+
+            <div class="target-box">
+
+                <span>Target Website</span>
+
+                <strong id="targetURL">
+                    https://example.com
+                </strong>
+
+            </div>
+
+
+            <div class="progress-area">
+
+                <div class="progress-info">
+
+                    <span>Scanning...</span>
+
+                    <span id="progressText">
+                        0%
+                    </span>
+
+                </div>
+
+                <div class="progress-bar">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="scan-steps">
+
+                <div class="scan-step active">
+                    <span>✓</span>
+                    Connecting to website
+                </div>
+
+                <div class="scan-step active">
+                    <span>✓</span>
+                    Checking security configuration
+                </div>
+
+                <div class="scan-step">
+                    <span>⏳</span>
+                    Analyzing vulnerabilities
+                </div>
+
+                <div class="scan-step">
+                    <span>○</span>
+                    Preparing security report
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
+<script src="js/script.js"></script>
+<script>
+    setTimeout(function () {
+        window.location.href = "results.html";
+    }, 3000);
+</script>
